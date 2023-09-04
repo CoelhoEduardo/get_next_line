@@ -6,39 +6,35 @@
 /*   By: eduardocoelho <eduardocoelho@student.42    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/22 12:15:16 by ecoelho-          #+#    #+#             */
-/*   Updated: 2023/08/31 02:33:36 by eduardocoel      ###   ########.fr       */
+/*   Updated: 2023/08/31 13:50:23 by eduardocoel      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-char  *ft_get_read(int fd, char **line_buff)
+static char  *ft_get_read(int fd, char **line_buff)
 {
     char    *buff;
     char    *temp;
     int bytes_read;
     
-    
-	*line_buff = (char *)malloc(sizeof(char) * BUFFER_SIZE + 1);
-	buff = (char *)malloc(sizeof(char) * BUFFER_SIZE + 1);
-    while (ft_strchr(*line_buff, '\n') == NULL && bytes_read != 0)
+    buff = (char *) malloc(sizeof(char) * BUFFER_SIZE + 1);
+    bytes_read = 1;
+    while (bytes_read != 0 && ft_strchr(*line_buff, '\n') == NULL)
     {
         bytes_read = read(fd, buff, BUFFER_SIZE);
         buff[bytes_read] = '\0';
         if (bytes_read == -1)
             return (NULL);
-        temp = ft_strdup(*line_buff);
-        free(buff);
+        temp = *line_buff;
         *line_buff = ft_strjoin(temp, buff);
         free(temp);
-        if (ft_strchr(*line_buff, '\n'))
-            break;
-        bytes_read = read(fd, buff, BUFFER_SIZE);
     }
+    free(buff);
     return (*line_buff);
 }
 
-char    *ft_get_line(char *buff)
+static char    *ft_get_line(char *buff)
 {
     char    *temp;
     char    *bytes_read;
@@ -64,7 +60,7 @@ char    *ft_get_line(char *buff)
     return (temp);
 }
 
-static char	*clean_s(char *str)
+static char	*ft_get_next(char *str)
 {
 	int		i;
 	int		j;
@@ -84,7 +80,7 @@ static char	*clean_s(char *str)
 	tmp = (char *)malloc(sizeof(char) * (ft_strlen(str) - i + 1));
 	if (!tmp)
 		return (free(str), free(tmp), NULL);
-	while (str[i] && str[i] != 0)
+	while (str[i])
 		tmp[j++] = str[i++];
 	tmp[j] = '\0';
 	free(str);
@@ -104,14 +100,14 @@ char	*get_next_line(int fd)
     if (!buff || !ft_strlen(buff))
         return (NULL);
     line = ft_get_line(buff);
-    buff = clean_s(buff);
+    buff = ft_get_next(buff);
     if (!line || ft_strlen(line))
     {
         free(line);
         free(buff);
         return (NULL);
     }
-    return (line);
+    return (buff);
 }
 
 
@@ -131,28 +127,28 @@ char	*get_next_line(int fd)
 // 	return (0);
 //  }
 
-// int main(void)
-// {
-//     int fd;
-//     char path[] = "example.txt";
-//     fd = open(path, O_RDONLY);
-//     if (fd == -1)
-//     {
-//         perror("Error opening file");
-//         return 1;
-//     }
+int main(void)
+{
+    int fd;
+    char path[] = "example.txt";
+    fd = open(path, O_RDONLY);
+    if (fd == -1)
+    {
+        perror("Error opening file");
+        return 1;
+    }
     
-//     char *line;
-//     while ((line = get_next_line(fd)) != NULL)
-//     {
-//         printf("%s\n", line);
-//     }
-//     // line = get_next_line(fd);
-//     // printf("%s\n", line);
+    char *line;
+    while ((line = get_next_line(fd)) != NULL)
+    {
+        printf("%s\n", line);
+    }
+    // line = get_next_line(fd);
+    // printf("%s\n", line);
 
-//     close(fd);
-//     return 0;
-// }
+    close(fd);
+    return 0;
+}
 
 
 

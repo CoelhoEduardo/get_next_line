@@ -6,9 +6,9 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-// #ifndef BUFFER_SIZE
-// #define BUFFER_SIZE 42
-// #endif
+#ifndef BUFFER_SIZE
+#define BUFFER_SIZE 42
+#endif
 
 size_t  ft_strlen(const char *s);
 char    *ft_strdup(const char *s);
