@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ecoelho- <ecoelho-@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/09/05 18:16:06 by ecoelho-          #+#    #+#             */
-/*   Updated: 2023/09/06 16:44:24 by ecoelho-         ###   ########.fr       */
+/*   Created: 2023/09/06 16:55:47 by ecoelho-          #+#    #+#             */
+/*   Updated: 2023/09/06 17:16:28 by ecoelho-         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 static char	*ft_get_read(int fd, char **buff)
 {
@@ -91,15 +91,15 @@ static char	*ft_remove_line(char *buff)
 
 char	*get_next_line(int fd)
 {
-	static char	*buff;
+	static char	*buff[OPEN_MAX];
 	char		*line;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	buff = ft_get_read(fd, &buff);
-	if (buff == 0)
+	buff[fd] = ft_get_read(fd, &buff[fd]);
+	if (buff[fd] == 0)
 		return (NULL);
-	line = ft_get_line(buff);
-	buff = ft_remove_line(buff);
+	line = ft_get_line(&buff[fd][0]);
+	buff[fd] = ft_remove_line(&buff[fd][0]);
 	return (line);
 }
