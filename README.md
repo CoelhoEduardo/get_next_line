@@ -1,6 +1,6 @@
 # get_next_line
 
-![get_next_line_bonus_badget](https://github.com/CoelhoEduardo/get_next_line/assets/76714413/63a183aa-a392-4876-abe8-af02fbe9fb47)
+![get_next_line_bonus_badget](https://github.com/byaliego/42-project-badges/raw/main/badges/get_next_linem.png)
 
 This project challenges us to create a function thats reads a file line by line.. 
 
